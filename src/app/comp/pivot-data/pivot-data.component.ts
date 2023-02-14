@@ -1,51 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component,ViewChild } from '@angular/core';
-import { jqxPivotGridComponent } from 'jqwidgets-ng/jqxpivotgrid';
-import { jqxPivotDesignerComponent } from 'jqwidgets-ng/jqxpivotdesigner';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { FundServiceService } from './fund-service.service';
-import { MatSidenav } from '@angular/material/sidenav';
-import { NavigationEnd, Router } from '@angular/router';
-import { delay, filter } from 'rxjs';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { FundServiceService } from 'src/app/fund-service.service';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-pivot-data',
+  templateUrl: './pivot-data.component.html',
+  styleUrls: ['./pivot-data.component.css']
 })
-@UntilDestroy({ checkProperties: true })
-export class AppComponent implements AfterViewInit{
-
-  @ViewChild(MatSidenav)sidenav!: MatSidenav;
-
-constructor(private observer: BreakpointObserver, private router: Router) {}
-
-ngAfterViewInit() {
-  this.observer
-    .observe(['(max-width: 800px)'])
-    .pipe(delay(1), untilDestroyed(this))
-    .subscribe((res) => {
-      if (res.matches) {
-        this.sidenav.mode = 'over';
-        this.sidenav.close();
-      } else {
-        this.sidenav.mode = 'side';
-        this.sidenav.open();
-      }
-    });
-
-  this.router.events
-    .pipe(
-      untilDestroyed(this),
-      filter((e) => e instanceof NavigationEnd)
-    )
-    .subscribe(() => {
-      if (this.sidenav.mode === 'over') {
-        this.sidenav.close();
-      }
-    });
-}
-  /* @ViewChild('myPivotGrid', { static: false }) pivotGrid: any; 
+export class PivotDataComponent implements AfterViewInit {
+  @ViewChild('myPivotGrid', { static: false }) pivotGrid: any; 
   @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any; 
 
   data:any;
@@ -183,5 +145,5 @@ ngAfterViewInit() {
      );
      
      return pivotDataSource;      
-  }  */
+  } 
 }

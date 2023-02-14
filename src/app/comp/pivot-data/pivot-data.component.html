@@ -1,0 +1,23 @@
+<table>
+    <tr>
+        <td>
+        <jqxPivotDesigner #myPivotDesigner
+            [type]="pivotGrid"
+            [width]="400" 
+            [height]="400">
+        </jqxPivotDesigner>
+        </td>
+        <td>
+        <jqxPivotGrid #myPivotGrid
+            [width]="getWidth()" 
+            [height]="400"
+            [width]="1200"
+            [source]="pivotDataSource"
+            [treeStyleRows] = "false"
+            [autoResize] = "false"
+            [multipleSelectionEnabled] = "true"
+            >
+        </jqxPivotGrid>
+     </td>
+    </tr>
+  </table>
