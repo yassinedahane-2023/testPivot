@@ -1,23 +1,27 @@
-<table>
+<table >
     <tr>
+       
         <td>
-        <jqxPivotDesigner #myPivotDesigner
-            [type]="pivotGrid"
-            [width]="400" 
-            [height]="400">
-        </jqxPivotDesigner>
-        </td>
-        <td>
-        <jqxPivotGrid #myPivotGrid
+            
+        <jqxPivotGrid  #myPivotGrid
             [width]="getWidth()" 
             [height]="400"
-            [width]="1200"
+            [width]="1000"
             [source]="pivotDataSource"
             [treeStyleRows] = "false"
             [autoResize] = "false"
             [multipleSelectionEnabled] = "true"
             >
         </jqxPivotGrid>
+   
      </td>
+     <td>
+        <jqxPivotDesigner #myPivotDesigner
+            [type]="pivotGrid"
+            [width]="250" 
+            [height]="400">
+        </jqxPivotDesigner>
+        </td>
+        
     </tr>
-  </table>
+</table>

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { FundServiceService } from 'src/app/fund-service.service';
@@ -8,15 +9,19 @@ import { FundServiceService } from 'src/app/fund-service.service';
   styleUrls: ['./table-data.component.css']
 })
 export class TableDataComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id','fundName', 'fundCode', 'Sedol','securityName','securityType'];
+  displayedColumns: string[] = ['id','fundName', 'fundCode', 'Sedol','securityName','securityType','Issuer','issuerCountry'];
   ELEMENT_DATA: any;
   dataSource :any
   @ViewChild(MatPaginator) paginator: any;
   data:any;
-   
+  selectedColumn:any;
+  toppings = new FormControl();
+  toppingList: string[] =[];
+
   constructor(private servicecli:FundServiceService){
-    
   }
+
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -24,16 +29,20 @@ export class TableDataComponent implements AfterViewInit {
       this.data=dt.data;
       console.log(this.data)
       console.log(Object.keys(this.data[0]))
+      this.toppingList=Object.keys(this.data[0])
       this.ELEMENT_DATA=this.data;
+
+      this.toppings.setValue(this.displayedColumns);
       this.dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
       this.dataSource.paginator = this.paginator;
     });
-    console.log("our data :"+this.data)
+  }
+  selectedFunc(e:any){
+    console.log(e)
   }
 
-
   ngAfterViewInit() {
-    
+
   }
 }
 

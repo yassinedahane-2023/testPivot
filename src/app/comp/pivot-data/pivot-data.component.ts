@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { of } from 'rxjs';
 import { FundServiceService } from 'src/app/fund-service.service';
 
 @Component({
@@ -12,14 +13,21 @@ export class PivotDataComponent implements AfterViewInit {
 
   data:any;
   columnNameFund:any;
-
+  dataMap:Map<string,any>;
+  //pivotDataSource: any=null;
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.servicecli.getAllData().then(dt=>{
       this.data=dt.data;
-      console.log(this.data)
-      console.log(Object.keys(this.data[0]))
+      const columnns:string[]=Object.keys(this.data[0]);
+      columnns.forEach(colmn => this.dataMap.set(colmn,this.data.map((d:any) => d[colmn])));
+      console.log(this.dataMap);
+      const ISINARRAY: any[]=this.data.map((d:any) => d['ISIN']);
+      //console.log(ISINARRAY);
+
+      //console.log(this.data)
+      //console.log(Object.keys(this.data[0]))
     });
     
     
@@ -27,6 +35,7 @@ export class PivotDataComponent implements AfterViewInit {
   constructor(private changeDetectorRef: ChangeDetectorRef,private servicecli:FundServiceService)
   {
     this.pivotDataSource = this.createPivotDataSource();
+    this.dataMap=new Map<string,any>;
   }
 
   
@@ -39,48 +48,51 @@ export class PivotDataComponent implements AfterViewInit {
  }
  
  ngAfterViewInit() {
-
-   
- let pivotGridComponent = this.pivotGrid;
- let pivotGridInstance = pivotGridComponent.getInstance();
-   
- this.pivotDesigner.target(pivotGridInstance);
- this.pivotDesigner.refresh();
- this.changeDetectorRef.detectChanges();
+//  of(this.pivotGrid).subscribe({
+//   next:(grid)=> {
+  let pivotGridComponent = this.pivotGrid;
+  let pivotGridInstance = pivotGridComponent.getInstance();
+  this.pivotDesigner.target(pivotGridInstance);
+  this.pivotDesigner.refresh();
+  this.changeDetectorRef.detectChanges();
+//   }
+//  });
  }
  
-  pivotDataSource: null;
-
+//  
+pivotDataSource: null;
   createPivotDataSource(): any {
      // prepare sample data
      let data = new Array();
-     let firstNames =
+     //let fundNames =this.dataMap.get("fundName");
+    let fundNames =["iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF"];
+     let fundCode =
      [
-        "Andrew", "Nancy", "Shelley", "Regina", "Yoshi", "Antoni", "Mayumi", "Ian", "Peter", "Lars", "Petra", "Martin", "Sven", "Elio", "Beate", "Cheryl", "Michael", "Guylene"
+        "AU000000IOZ4", "AU000000IOZ4", "AU000000IOZ4", "AU000000IOZ4"
      ];
-     let lastNames =
+     let FundNAVPS =
      [
-        "Fuller", "Davolio", "Burke", "Murphy", "Nagase", "Saavedra", "Ohno", "Devling", "Wilson", "Peterson", "Winkler", "Bein", "Petersen", "Rossi", "Vileid", "Saylor", "Bjorn", "Nodier"
+        "29,93", "29,93", "29,93", "29,93"
      ];
-     let productNames =
+     let FundNAV =
      [
-        "Black Tea", "Green Tea", "Caffe Espresso", "Doubleshot Espresso", "Caffe Latte", "White Chocolate Mocha", "Cramel Latte", "Caffe Americano", "Cappuccino", "Espresso Truffle", "Espresso con Panna", "Peppermint Mocha Twist"
+        "3819519440,1","3819519440,1","3819519440,1","3819519440,1"
      ];
-     let priceValues =
+     let FundSharesinissue =
      [
-        "2.25", "1.5", "3.0", "3.3", "4.5", "3.6", "3.8", "2.5", "5.0", "1.75", "3.25", "4.0"
+        "127599790","127599790","127599790","127599790"
      ];
      for (let i = 0; i < 100; i++) {
         let row : any={};
-        let productindex = Math.floor(Math.random() * productNames.length);
-        let price = parseFloat(priceValues[productindex]);
+        let productindex = Math.floor(Math.random() * FundNAVPS.length);
+        let FundShares = parseFloat(FundSharesinissue[productindex]);
         let quantity = 1 + Math.round(Math.random() * 10);
-        row["firstname"] = firstNames[Math.floor(Math.random() * firstNames.length)];
-        row["lastname"] = lastNames[Math.floor(Math.random() * lastNames.length)];
-        row["productname"] = productNames[productindex];
-        row["price"] = price;
-        row["quantity"] = quantity;
-        row["total"] = price * quantity;
+        row["fundName"] = fundNames[i];
+        row["fundcode"] = fundCode[i];
+        row["Fundnavps"] = FundNAVPS[i];
+        row["Fundnav"] = FundNAV[i];
+        row["FundShares"] = FundSharesinissue[i];
+        row["total"] = FundShares * quantity;
         data[i] = row;
      }
      // create a data source and data adapter
@@ -90,11 +102,11 @@ export class PivotDataComponent implements AfterViewInit {
         datatype: "array",
         datafields:
         [
-           { name: 'firstname', type: 'string' },
-           { name: 'lastname', type: 'string' },
-           { name: 'productname', type: 'string' },
-           { name: 'quantity', type: 'number' },
-           { name: 'price', type: 'number' },
+           { name: 'fundName', type: 'string' },
+           { name: 'fundcode', type: 'string' },
+           { name: 'Fundnavps', type: 'string' },
+           { name: 'Fundnav', type: 'string' },
+           { name: 'FundShares', type: 'number' },
            { name: 'total', type: 'number' }
         ]
      };
@@ -123,23 +135,23 @@ export class PivotDataComponent implements AfterViewInit {
          return variance;
        }
      },
-     pivotValuesOnRows: false,
-     columns : [{ dataField: 'firstname', text: 'First Name' }, { dataField: 'lastname'}],
-     rows: [{ dataField: 'productname', align: 'left' }],
+     pivotValuesOnRows: true,
+     rows : [{ dataField: 'fundName', text: 'Fund Name' },{ dataField: 'fundcode', text: 'Fund Code' }],
+     columns: [],
      filters: [
-       {
-         dataField: 'productname',
-         text: 'Product name',
+      /*  {
+         dataField: 'Fundnavps',
+         text: 'Fund navps',
          filterFunction: function (value:any) {
-           if (value == "Black Tea" || value == "Green Tea")
              return true;
-           return false;
+          
          }
-       }
+       } */
      ],
      values: [
-       { dataField: 'price', 'function': 'sum', text: 'Sum', align: 'left', formatSettings: { prefix: '$', decimalPlaces: 2, align: 'center' }, cellsClassName: 'myItemStyle', cellsClassNameSelected: 'myItemStyleSelected' },
-       { dataField: 'price', 'function': 'count', text: 'Count', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' }
+       { dataField: 'FundShares', 'function': 'max', text: 'MaxFundShares', align: 'left', cellsClassName: 'myItemStyle', cellsClassNameSelected: 'myItemStyleSelected' },
+       { dataField: 'Fundnav', 'function': 'max', text: 'MaxFundNav', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' },
+       { dataField: 'Fundnavps', 'function': 'count', text: 'CountFundnavps', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' }
      ]
         }
      );
