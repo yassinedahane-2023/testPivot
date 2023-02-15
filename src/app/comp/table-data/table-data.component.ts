@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import { FundServiceService } from 'src/app/fund-service.service';
+import { FundService } from 'src/app/services/fund.service';
 @Component({
   selector: 'app-table-data',
   templateUrl: './table-data.component.html',
@@ -18,7 +18,7 @@ export class TableDataComponent implements AfterViewInit {
   toppings = new FormControl();
   toppingList: string[] =[];
 
-  constructor(private servicecli:FundServiceService){
+  constructor(private servicecli:FundService){
   }
 
 

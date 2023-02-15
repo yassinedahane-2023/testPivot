@@ -1,87 +1,79 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { of } from 'rxjs';
-import { FundServiceService } from 'src/app/fund-service.service';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-pivot-data',
   templateUrl: './pivot-data.component.html',
   styleUrls: ['./pivot-data.component.css']
 })
-export class PivotDataComponent implements AfterViewInit {
-  @ViewChild('myPivotGrid', { static: false }) pivotGrid: any; 
-  @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any; 
+export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentChecked{
+  @ViewChild('myPivotGrid', { static: false }) pivotGrid: any;
+  @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any;
 
   data:any;
   columnNameFund:any;
+  pivotDataSource:any;
   dataMap:Map<string,any>;
-  //pivotDataSource: any=null;
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.servicecli.getAllData().then(dt=>{
-      this.data=dt.data;
+      this.data=this.route.snapshot.data['data'].data;
       const columnns:string[]=Object.keys(this.data[0]);
       columnns.forEach(colmn => this.dataMap.set(colmn,this.data.map((d:any) => d[colmn])));
       console.log(this.dataMap);
-      const ISINARRAY: any[]=this.data.map((d:any) => d['ISIN']);
-      //console.log(ISINARRAY);
+      this.pivotDataSource = this.createPivotDataSource();
 
-      //console.log(this.data)
-      //console.log(Object.keys(this.data[0]))
-    });
-    
-    
   }
-  constructor(private changeDetectorRef: ChangeDetectorRef,private servicecli:FundServiceService)
+
+  constructor( private changeDetectorRef: ChangeDetectorRef,
+               private route: ActivatedRoute )
   {
-    this.pivotDataSource = this.createPivotDataSource();
     this.dataMap=new Map<string,any>;
   }
 
-  
+
  getWidth() : any {
    if (document.body.offsetWidth < 400) {
      return '50%';
    }
-   
+
    return 400;
  }
- 
+
+
+
+
  ngAfterViewInit() {
 //  of(this.pivotGrid).subscribe({
 //   next:(grid)=> {
-  let pivotGridComponent = this.pivotGrid;
-  let pivotGridInstance = pivotGridComponent.getInstance();
-  this.pivotDesigner.target(pivotGridInstance);
-  this.pivotDesigner.refresh();
-  this.changeDetectorRef.detectChanges();
+
+    let pivotGridComponent = this.pivotGrid;
+    let pivotGridInstance = pivotGridComponent.getInstance();
+    this.pivotDesigner.target(pivotGridInstance);
+    this.pivotDesigner.refresh();
+
 //   }
 //  });
  }
- 
-//  
-pivotDataSource: null;
+
+//
   createPivotDataSource(): any {
      // prepare sample data
      let data = new Array();
-     //let fundNames =this.dataMap.get("fundName");
-    let fundNames =["iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF"];
-     let fundCode =
-     [
-        "AU000000IOZ4", "AU000000IOZ4", "AU000000IOZ4", "AU000000IOZ4"
-     ];
-     let FundNAVPS =
-     [
-        "29,93", "29,93", "29,93", "29,93"
-     ];
-     let FundNAV =
-     [
-        "3819519440,1","3819519440,1","3819519440,1","3819519440,1"
-     ];
-     let FundSharesinissue =
-     [
-        "127599790","127599790","127599790","127599790"
-     ];
+     let fundNames =this.dataMap.get("fundName");
+    //let fundNames =["iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF","iShares Core S&P/ASX 200 ETF"];
+
+    let fundCode =this.dataMap.get("fundCode");
+
+     let FundNAVPS =this.dataMap.get("Fund NAVPS");
+
+     let FundNAV =this.dataMap.get("Fund NAV");
+
+     let Sedol=this.dataMap.get("Sedol")
+
+     let FundSharesinissue =this.dataMap.get("Fund Shares in issue");
+
      for (let i = 0; i < 100; i++) {
         let row : any={};
         let productindex = Math.floor(Math.random() * FundNAVPS.length);
@@ -92,10 +84,13 @@ pivotDataSource: null;
         row["Fundnavps"] = FundNAVPS[i];
         row["Fundnav"] = FundNAV[i];
         row["FundShares"] = FundSharesinissue[i];
+        row["Sedol"]=Sedol[i];
         row["total"] = FundShares * quantity;
         data[i] = row;
      }
-     // create a data source and data adapter
+
+    // create a data source and data adapter
+
      let source =
      {
         localdata: data,
@@ -107,12 +102,14 @@ pivotDataSource: null;
            { name: 'Fundnavps', type: 'string' },
            { name: 'Fundnav', type: 'string' },
            { name: 'FundShares', type: 'number' },
+          { name: 'Sedol', type: 'number' },
            { name: 'total', type: 'number' }
         ]
      };
      let dataAdapter = new jqx.dataAdapter(source);
+
      dataAdapter.dataBind();
-     
+
      // create a pivot data source from the dataAdapter
      let pivotDataSource = new jqx.pivot(
         dataAdapter,
@@ -135,7 +132,7 @@ pivotDataSource: null;
          return variance;
        }
      },
-     pivotValuesOnRows: true,
+     pivotValuesOnRows: false,
      rows : [{ dataField: 'fundName', text: 'Fund Name' },{ dataField: 'fundcode', text: 'Fund Code' }],
      columns: [],
      filters: [
@@ -144,7 +141,7 @@ pivotDataSource: null;
          text: 'Fund navps',
          filterFunction: function (value:any) {
              return true;
-          
+
          }
        } */
      ],
@@ -155,7 +152,13 @@ pivotDataSource: null;
      ]
         }
      );
-     
-     return pivotDataSource;      
-  } 
+
+    console.log('pivotDataSource created');
+
+    return pivotDataSource;
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetectorRef.detectChanges();
+  }
 }

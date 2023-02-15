@@ -15,9 +15,13 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule,ReactiveFormsModule} from '@angular/forms';
+import {ResolverService} from "./services/resolver.service";
+import {FundService} from "./services/fund.service";
+import { RouterModule} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -28,7 +32,7 @@ import { FormsModule,ReactiveFormsModule} from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-     jqxPivotDesignerModule, 
+     jqxPivotDesignerModule,
      AppRoutingModule,
      MatTableModule,
      MatPaginatorModule,
@@ -41,9 +45,10 @@ import { FormsModule,ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    jqxPivotGridModule, BrowserAnimationsModule,
+    HttpClientModule,
+    jqxPivotGridModule, BrowserAnimationsModule,RouterModule
   ],
-  providers: [],
+  providers: [ResolverService,FundService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
