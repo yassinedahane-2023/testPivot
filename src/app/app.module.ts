@@ -22,12 +22,19 @@ import {ResolverService} from "./services/resolver.service";
 import {FundService} from "./services/fund.service";
 import { RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
-
+import { jqxWindowModule } from 'jqwidgets-ng/jqxwindow';
+import { jqxDataTableModule } from 'jqwidgets-ng/jqxdatatable';
+import { FundsComponent } from './pages/funds/funds.component';
+import { PositionsComponent } from './pages/positions/positions.component';
+import { FundsAgrComponent } from './pages/funds-agr/funds-agr.component';
 @NgModule({
   declarations: [
     AppComponent,
     TableDataComponent,
-    PivotDataComponent
+    PivotDataComponent,
+    FundsComponent,
+    PositionsComponent,
+    FundsAgrComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,7 @@ import {HttpClientModule} from "@angular/common/http";
     ReactiveFormsModule,
     MatSelectModule,
     HttpClientModule,
-    jqxPivotGridModule, BrowserAnimationsModule,RouterModule
+    jqxPivotGridModule, BrowserAnimationsModule,RouterModule,jqxWindowModule,jqxDataTableModule
   ],
   providers: [ResolverService,FundService],
   bootstrap: [AppComponent]

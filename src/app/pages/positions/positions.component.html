@@ -1,0 +1,76 @@
+
+<div style="display: flex;justify-content: space-between">
+  <div style="justify-self: flex-start">
+    <button mat-icon-button (click)="onBackClicked()">
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+  </div>
+  <div style="justify-self: flex-end">
+    <mat-form-field appearance="fill">
+      <mat-label>Colmuns</mat-label>
+      <mat-select   [formControl]="toppings" multiple>
+        <mat-option *ngFor="let topping of displayedColumns" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</div>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="sedol">
+      <th mat-header-cell *matHeaderCellDef> sedol </th>
+      <td mat-cell *matCellDef="let element"> {{element.sedol}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="securityType">
+      <th mat-header-cell *matHeaderCellDef> securityType </th>
+      <td mat-cell *matCellDef="let element"> {{element.securityType}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="securityName">
+      <th mat-header-cell *matHeaderCellDef> securityName </th>
+      <td mat-cell *matCellDef="let element"> {{element.securityName}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="isin">
+      <th mat-header-cell *matHeaderCellDef> fundNisinavPS </th>
+      <td mat-cell *matCellDef="let element"> {{element.isin}} </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="issuer">
+      <th mat-header-cell *matHeaderCellDef> issuer </th>
+      <td mat-cell *matCellDef="let element"> {{element.issuer}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="numberOfShares">
+      <th mat-header-cell *matHeaderCellDef> numberOfShares </th>
+      <td mat-cell *matCellDef="let element"> {{element.numberOfShares}} </td>
+    </ng-container>
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button >
+          <mat-icon color="primary">edit</mat-icon>
+        </button>
+        <button mat-icon-button >
+          <mat-icon color="warn">delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[2, 5, 10]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>

@@ -1,5 +1,7 @@
 import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
+import {jqxDataTableComponent} from "jqwidgets-ng/jqxdatatable";
+import {jqxWindowComponent} from "jqwidgets-ng/jqxwindow";
 
 @Component({
   selector: 'app-pivot-data',
@@ -9,6 +11,8 @@ import {ActivatedRoute} from "@angular/router";
 export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentChecked{
   @ViewChild('myPivotGrid', { static: false }) pivotGrid: any;
   @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any;
+  @ViewChild('drillThroughWindow', { static: false }) drillThroughWindow: any;
+  @ViewChild('tableSrcRecords', { static: false }) tableSrcRecords: any;
 
   data:any;
   columnNameFund:any;
@@ -49,6 +53,7 @@ export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentC
 //   next:(grid)=> {
 
     let pivotGridComponent = this.pivotGrid;
+
     let pivotGridInstance = pivotGridComponent.getInstance();
     this.pivotDesigner.target(pivotGridInstance);
     this.pivotDesigner.refresh();
@@ -58,6 +63,15 @@ export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentC
  }
 
 //
+  tableSrcRecordsColumns: any[] = [
+    { text: 'Fund name', dataField: 'fundName', width: 150 },
+    { text: 'Fund Code', dataField: 'fundCode', width: 150 },
+    { text: 'Sedol', dataField: 'Sedol', width: 150 },
+    { text: 'Issuer', dataField: 'Issuer', width: 150 },
+    { text: 'Issuer Country', dataField: 'issuerCountry', width: 150 },
+   ];
+
+  sampleData:any;
   createPivotDataSource(): any {
      // prepare sample data
      let data = new Array();
@@ -88,6 +102,7 @@ export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentC
         row["total"] = FundShares * quantity;
         data[i] = row;
      }
+    this.sampleData = data;
 
     // create a data source and data adapter
 
@@ -132,7 +147,7 @@ export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentC
          return variance;
        }
      },
-     pivotValuesOnRows: false,
+     pivotValuesOnRows: true,
      rows : [{ dataField: 'fundName', text: 'Fund Name' },{ dataField: 'fundcode', text: 'Fund Code' }],
      columns: [],
      filters: [
@@ -159,6 +174,40 @@ export class PivotDataComponent implements AfterViewInit , OnInit ,AfterContentC
   }
 
   ngAfterContentChecked(): void {
+
     this.changeDetectorRef.detectChanges();
+  }
+  drillThroughDataAdapter:any;
+  drillThrough(pivotRow:any, pivotColumn:any): void
+  {
+    let pivotGridInstance = this.pivotGrid.getInstance();
+    let rows = pivotGridInstance.getPivotCells().drillThroughCell(pivotRow, pivotColumn);
+
+    let drillThroughRows = [];
+    for (let i = 0; i < rows.length; i++)
+      drillThroughRows[i] = this.data[rows[i]]
+    let drillThroughSrc =
+      {
+        localData: drillThroughRows,
+        dataType: "array",
+        dataFields:
+          [
+            { name: 'fundName', type: 'string' },
+            { name: 'fundCode', type: 'string' },
+            { name: 'Sedol', type: 'string' },
+            { name: 'Issuer', type: 'string' },
+            { name: 'issuerCountry', type: 'string' },
+
+
+          ]
+      };
+
+    this.drillThroughDataAdapter  = new jqx.dataAdapter(drillThroughSrc);
+    this.tableSrcRecords.source(this.drillThroughDataAdapter);
+    this.drillThroughWindow.open();
+  }
+  onPivotCellDblClick(event: any): void {
+    let args = event.args;
+    this.drillThrough(args.pivotRow, args.pivotColumn);
   }
 }
