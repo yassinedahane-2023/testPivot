@@ -1,8 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component,ViewChild } from '@angular/core';
-import { jqxPivotGridComponent } from 'jqwidgets-ng/jqxpivotgrid';
-import { jqxPivotDesignerComponent } from 'jqwidgets-ng/jqxpivotdesigner';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { FundServiceService } from './fund-service.service';
+import { AfterViewInit,  Component,ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { delay, filter } from 'rxjs';
@@ -45,8 +41,8 @@ ngAfterViewInit() {
       }
     });
 }
-  /* @ViewChild('myPivotGrid', { static: false }) pivotGrid: any; 
-  @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any; 
+  /* @ViewChild('myPivotGrid', { static: false }) pivotGrid: any;
+  @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any;
 
   data:any;
   columnNameFund:any;
@@ -59,34 +55,34 @@ ngAfterViewInit() {
       console.log(this.data)
       console.log(Object.keys(this.data[0]))
     });
-    
-    
+
+
   }
   constructor(private changeDetectorRef: ChangeDetectorRef,private servicecli:FundServiceService)
   {
     this.pivotDataSource = this.createPivotDataSource();
   }
 
-  
+
  getWidth() : any {
    if (document.body.offsetWidth < 400) {
      return '50%';
    }
-   
+
    return 400;
  }
- 
+
  ngAfterViewInit() {
 
-   
+
  let pivotGridComponent = this.pivotGrid;
  let pivotGridInstance = pivotGridComponent.getInstance();
-   
+
  this.pivotDesigner.target(pivotGridInstance);
  this.pivotDesigner.refresh();
  this.changeDetectorRef.detectChanges();
  }
- 
+
   pivotDataSource: null;
 
   createPivotDataSource(): any {
@@ -138,7 +134,7 @@ ngAfterViewInit() {
      };
      let dataAdapter = new jqx.dataAdapter(source);
      dataAdapter.dataBind();
-     
+
      // create a pivot data source from the dataAdapter
      let pivotDataSource = new jqx.pivot(
         dataAdapter,
@@ -181,7 +177,7 @@ ngAfterViewInit() {
      ]
         }
      );
-     
-     return pivotDataSource;      
+
+     return pivotDataSource;
   }  */
 }

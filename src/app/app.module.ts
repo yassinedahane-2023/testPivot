@@ -15,17 +15,31 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
-
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule,ReactiveFormsModule} from '@angular/forms';
+import {ResolverService} from "./services/resolver.service";
+import {FundService} from "./services/fund.service";
+import { RouterModule} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
+import { jqxWindowModule } from 'jqwidgets-ng/jqxwindow';
+import { jqxDataTableModule } from 'jqwidgets-ng/jqxdatatable';
+import { FundsComponent } from './pages/funds/funds.component';
+import { PositionsComponent } from './pages/positions/positions.component';
+import { FundsAgrComponent } from './pages/funds-agr/funds-agr.component';
 @NgModule({
   declarations: [
     AppComponent,
     TableDataComponent,
-    PivotDataComponent
+    PivotDataComponent,
+    FundsComponent,
+    PositionsComponent,
+    FundsAgrComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-     jqxPivotDesignerModule, 
+     jqxPivotDesignerModule,
      AppRoutingModule,
      MatTableModule,
      MatPaginatorModule,
@@ -34,9 +48,14 @@ import {MatDividerModule} from '@angular/material/divider';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    jqxPivotGridModule, BrowserAnimationsModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    HttpClientModule,
+    jqxPivotGridModule, BrowserAnimationsModule,RouterModule,jqxWindowModule,jqxDataTableModule
   ],
-  providers: [],
+  providers: [ResolverService,FundService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
