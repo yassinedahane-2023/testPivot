@@ -1,17 +1,21 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { FundService } from 'src/app/services/fund.service';
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
+import { AuthSession } from '@supabase/supabase-js';
 @Component({
   selector: 'app-table-data',
   templateUrl: './table-data.component.html',
   styleUrls: ['./table-data.component.css']
 })
 export class TableDataComponent implements OnInit, AfterViewInit {
-    displayedColumns: string[] = ['fundCode','fundName', 'fundNav', 'fundNavPS','fundSharedInIssue','actions'];
+    //displayedColumns: string[] = ['fundCode','fundName', 'fundNav', 'fundNavPS','fundSharedInIssue','actions'];
+   
+
+    displayedColumns: string[] = ['fundCode','fundName', 'max_Nav','max_iss', 'count_PS','actions'];
   ELEMENT_DATA: any;
   dataSource :any
   @ViewChild(MatPaginator) paginator: any;
@@ -47,7 +51,11 @@ export class TableDataComponent implements OnInit, AfterViewInit {
     console.log(e)
   }
   onRowSelected(row:any) {
-    this.router.navigateByUrl('positions',{state:row});
+    this.router.navigateByUrl('/positions/'+row.fundCode);
+  }
+
+  onEdit(elem:any){
+    this.router.navigateByUrl('/editFund/'+elem.fundCode)
   }
 
   ngAfterViewInit() {

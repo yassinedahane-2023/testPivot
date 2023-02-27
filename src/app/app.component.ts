@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { delay, filter } from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import { SupabaseService } from './services/supabase.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,13 +12,19 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 })
 @UntilDestroy({ checkProperties: true })
 export class AppComponent implements AfterViewInit{
-
+  session = this.supabase.session
   @ViewChild(MatSidenav)sidenav!: MatSidenav;
 
-constructor(private observer: BreakpointObserver, private router: Router) {}
+constructor(private observer: BreakpointObserver, public router: Router,private readonly supabase: SupabaseService) {}
+
+
+ngOnInit() {
+  this.supabase.authChanges((_, session) => (this.session = session))
+}
 
 ngAfterViewInit() {
-  this.observer
+  //edit for test auth
+  /* this.observer
     .observe(['(max-width: 800px)'])
     .pipe(delay(1), untilDestroyed(this))
     .subscribe((res) => {
@@ -39,7 +46,7 @@ ngAfterViewInit() {
       if (this.sidenav.mode === 'over') {
         this.sidenav.close();
       }
-    });
+    }); */
 }
   /* @ViewChild('myPivotGrid', { static: false }) pivotGrid: any;
   @ViewChild('myPivotDesigner', { static: false }) pivotDesigner: any;
