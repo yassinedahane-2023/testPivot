@@ -1,13 +1,15 @@
 <div style="display:flex;justify-content: flex-end">
 
-    <mat-form-field appearance="fill">
+
+   <!--  <mat-form-field appearance="fill">
       <mat-label>Colmuns</mat-label>
-      <mat-select   (selectionChange)="selectedFunc($event)" [formControl]="toppings" multiple>
+      <mat-select  (selectionChange)="selectedFunc($event)" [formControl]="toppings" multiple>
         <mat-option *ngFor="let topping of displayedColumns" [value]="topping">{{topping}}</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
 </div>
-<div class="mat-elevation-z8">
+<div class="mt-5"><h1 class="font-weight-bold">Liste des funds</h1> </div>
+<div class="mat-elevation-z8 mt-5">
   <table mat-table [dataSource]="dataSource">
 
     <!-- Position Column -->
@@ -21,23 +23,23 @@
       <th mat-header-cell *matHeaderCellDef> Fund Name </th>
       <td mat-cell *matCellDef="let element"> {{element.fundName}} </td>
     </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="fundNav">
-      <th mat-header-cell *matHeaderCellDef> fundNav </th>
-      <td mat-cell *matCellDef="let element"> {{element.fundNav}} </td>
-    </ng-container>
-
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="max_Nav">
+    <th mat-header-cell *matHeaderCellDef> Max of Fund NAV </th>
+    <td mat-cell *matCellDef="let element"> {{element.max_Nav}} </td>
+  </ng-container>
     <!-- Symbol Column -->
-    <ng-container matColumnDef="fundNavPS">
-      <th mat-header-cell *matHeaderCellDef> fundNavPS </th>
-      <td mat-cell *matCellDef="let element"> {{element.fundNavPS}} </td>
+    <ng-container matColumnDef="max_iss">
+      <th mat-header-cell *matHeaderCellDef> Max of Fund Shares in issue </th>
+      <td mat-cell *matCellDef="let element"> {{element.max_iss}} </td>
     </ng-container>
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="fundSharedInIssue">
-        <th mat-header-cell *matHeaderCellDef> fundSharedInIssue </th>
-        <td mat-cell *matCellDef="let element"> {{element.fundSharedInIssue}} </td>
-      </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="count_PS">
+      <th mat-header-cell *matHeaderCellDef> Count of Fund NAVPS </th>
+      <td mat-cell *matCellDef="let element"> {{element.count_PS}} </td>
+    </ng-container>
+
+  
         <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
@@ -45,8 +47,8 @@
         <button mat-icon-button (click)="onRowSelected(element)">
           <mat-icon>launch</mat-icon>
         </button>
-        <button mat-icon-button >
-          <mat-icon color="primary">edit</mat-icon>
+        <button mat-icon-button (click)="onEdit(element)">
+          <mat-icon color="primary" >edit</mat-icon>
         </button>
         <button mat-icon-button >
           <mat-icon color="warn">delete</mat-icon>

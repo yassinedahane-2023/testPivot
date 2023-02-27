@@ -6,6 +6,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../../comp/table-data/table-data.component";
 import {MatPaginator} from "@angular/material/paginator";
 import {Location} from "@angular/common";
+import { FundService } from 'src/app/services/fund.service';
 
 @Component({
   selector: 'app-positions',
@@ -21,25 +22,38 @@ export class PositionsComponent implements OnInit,AfterViewInit{
   toppingList: string[] =[];
   dataSource:any;
   displayedColumns: string[] = ['sedol','securityName', 'securityType', 'issuer','isin','numberOfShares','actions'];
-constructor(private route: Router, private http:HttpClient,private location: Location) {
+constructor(private route: Router,private fundService:FundService, private http:HttpClient,private location: Location,private activatedRoute:ActivatedRoute) {
   this.toppings=new FormControl(this.toppingList);
 
   // @ts-ignore
-  this.actionsData=this.route.getCurrentNavigation()?.extras.state['positions'];
+ // this.actionsData=this.route.getCurrentNavigation()?.extras.state['positions'];
 }
 
   ngOnInit(): void {
-    this.toppingList=['sedol','securityName'];
+    console.log(this.activatedRoute.snapshot.params['id']);
+    const id=this.activatedRoute.snapshot.params['id'];
+    this.fundService.getAllFundsByCode(id).subscribe(data=>{
+      console.log(data.positions)
+      this.actionsData=data.positions;
+      this.dataSource = new MatTableDataSource<PositionsModel>(data.positions); 
+      this.toppingList=['sedol','securityName'];
     this.toppings=new FormControl(this.toppingList);
+    this.dataSource.paginator = this.paginator;
+    },err=>{
+      console.log(err);
+    })
+   
     console.log(this.actionsData);
-    this.dataSource = new MatTableDataSource<PositionsModel>(this.actionsData);
+    
   }
   onBackClicked(){
     this.location.back();
   }
-
+  onEditPosition(data:any){
+    this.route.navigateByUrl('editPosition/'+data.sedol)
+  }
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    
   }
 }
 

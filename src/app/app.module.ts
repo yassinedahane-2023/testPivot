@@ -27,6 +27,16 @@ import { jqxDataTableModule } from 'jqwidgets-ng/jqxdatatable';
 import { FundsComponent } from './pages/funds/funds.component';
 import { PositionsComponent } from './pages/positions/positions.component';
 import { FundsAgrComponent } from './pages/funds-agr/funds-agr.component';
+import { EditFundsComponent } from './comp/edit-funds/edit-funds.component';
+import { MatInputModule } from '@angular/material/input';
+import { EditPositionComponent } from './comp/edit-position/edit-position.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AuthComponent } from './comp/auth/auth.component';
+import { AccountComponent } from './comp/account/account.component';
+import { SignUpComponent } from './comp/sign-up/sign-up.component';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,9 +44,15 @@ import { FundsAgrComponent } from './pages/funds-agr/funds-agr.component';
     PivotDataComponent,
     FundsComponent,
     PositionsComponent,
-    FundsAgrComponent
+    FundsAgrComponent,
+    EditFundsComponent,
+    EditPositionComponent,
+    AuthComponent,
+    AccountComponent,
+    SignUpComponent
   ],
   imports: [
+
     BrowserModule,
     AppRoutingModule,
      jqxPivotDesignerModule,
@@ -53,7 +69,9 @@ import { FundsAgrComponent } from './pages/funds-agr/funds-agr.component';
     ReactiveFormsModule,
     MatSelectModule,
     HttpClientModule,
-    jqxPivotGridModule, BrowserAnimationsModule,RouterModule,jqxWindowModule,jqxDataTableModule
+    MatInputModule,NgbDropdownModule,
+    
+    jqxPivotGridModule, BrowserAnimationsModule,RouterModule,jqxWindowModule,jqxDataTableModule, ModalModule.forRoot()
   ],
   providers: [ResolverService,FundService],
   bootstrap: [AppComponent]

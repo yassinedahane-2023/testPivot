@@ -21,8 +21,28 @@ async getAllData(){
  }
 
  getAllFunds() : Observable<any> {
-    return this.http.get('http://localhost:8080/funds');
+    //return this.http.get('http://localhost:8081/funds');
+    return this.http.get('http://localhost:8081/fundsAgr');
  }
+
+ getAllFundsByCode(id:any) : Observable<any> {
+  //return this.http.get('http://localhost:8081/funds');
+  return this.http.get('http://localhost:8081/fundByName/'+id);
+}
+
+updateFund(id:any,data:any){
+  return this.http.put('http://localhost:8081/updateFund/'+id,data);
+}
+
+getPosition(id:any){
+return this.http.get('http://localhost:8081/positionBySedol/'+id);
+}
+
+updatePosition(id:any,data:any){
+  return this.http.put('http://localhost:8081/updatePosition/'+id,data);
+}
+
+
 
 
 }
