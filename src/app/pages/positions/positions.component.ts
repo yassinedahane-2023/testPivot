@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {FormControl} from "@angular/forms";
@@ -17,18 +17,22 @@ export class PositionsComponent implements OnInit,AfterViewInit{
   id:any;
   actionsData:any
   @ViewChild(MatPaginator) paginator: any;
+  showViewer = true;
 
+  @ViewChild('designer') designer: any;
   toppings:  FormControl;
   toppingList: string[] =[];
   dataSource:any;
   displayedColumns: string[] = ['sedol','securityName', 'securityType', 'issuer','isin','numberOfShares','actions'];
-constructor(private route: Router,private fundService:FundService, private http:HttpClient,private location: Location,private activatedRoute:ActivatedRoute) {
+  constructor(private route: Router,private fundService:FundService, private http:HttpClient,private location: Location,private activatedRoute:ActivatedRoute) {
   this.toppings=new FormControl(this.toppingList);
 
   // @ts-ignore
  // this.actionsData=this.route.getCurrentNavigation()?.extras.state['positions'];
 }
-
+  backToViewer() {
+    this.showViewer = !this.showViewer;
+  }
   ngOnInit(): void {
     console.log(this.activatedRoute.snapshot.params['id']);
     const id=this.activatedRoute.snapshot.params['id'];
@@ -46,7 +50,8 @@ constructor(private route: Router,private fundService:FundService, private http:
     console.log(this.actionsData);
     
   }
-  onBackClicked(){
+
+  onBackClicked() {
     this.location.back();
   }
   onEditPosition(data:any){

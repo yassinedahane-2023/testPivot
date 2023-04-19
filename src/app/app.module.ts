@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { StimulsoftDesignerModule } from 'stimulsoft-designer-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { jqxPivotGridModule } from 'jqwidgets-ng/jqxpivotgrid';
@@ -35,6 +35,8 @@ import { AuthComponent } from './comp/auth/auth.component';
 import { AccountComponent } from './comp/account/account.component';
 import { SignUpComponent } from './comp/sign-up/sign-up.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
+import { ExportService } from 'stimulsoft-viewer-angular/lib/services/export.service';
 
 
 @NgModule({
@@ -66,6 +68,9 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     MatDividerModule,
     MatFormFieldModule,
     FormsModule,
+    BrowserAnimationsModule,
+    StimulsoftViewerModule,
+    StimulsoftDesignerModule,
     ReactiveFormsModule,
     MatSelectModule,
     HttpClientModule,
@@ -73,7 +78,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     
     jqxPivotGridModule, BrowserAnimationsModule,RouterModule,jqxWindowModule,jqxDataTableModule, ModalModule.forRoot()
   ],
-  providers: [ResolverService,FundService],
+  providers: [ResolverService, FundService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

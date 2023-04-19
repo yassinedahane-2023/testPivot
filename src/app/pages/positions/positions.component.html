@@ -8,7 +8,7 @@
   <div style="justify-self: flex-end">
     <mat-form-field appearance="fill">
       <mat-label>Colmuns</mat-label>
-      <mat-select   [formControl]="toppings" multiple>
+      <mat-select [formControl]="toppings" multiple>
         <mat-option *ngFor="let topping of displayedColumns" [value]="topping">{{topping}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -18,7 +18,7 @@
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource">
 
-  <ng-container matColumnDef="sedol">
+    <ng-container matColumnDef="sedol">
       <th mat-header-cell *matHeaderCellDef> sedol </th>
       <td mat-cell *matCellDef="let element"> {{element.sedol}} </td>
     </ng-container>
@@ -58,15 +58,16 @@
         <button mat-icon-button (click)="onEditPosition(element)">
           <mat-icon color="primary">edit</mat-icon>
         </button>
-        <button mat-icon-button >
+        <button mat-icon-button>
           <mat-icon color="warn">delete</mat-icon>
         </button>
+
       </td>
     </ng-container>
 
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
   <mat-paginator [pageSizeOptions]="[2, 5, 10]"
@@ -74,3 +75,24 @@
                  aria-label="Select page of periodic elements">
   </mat-paginator>
 </div>
+
+<button mat-button color="warn" *ngIf="!showViewer" (click)="backToViewer()">
+  back to viewer
+</button>
+
+<div>
+
+  <stimulsoft-viewer-angular *ngIf="showViewer"
+                             [requestUrl]="'http://localhost:2347/Viewer/{action}'"
+                             [action]="'InitViewer'"
+                             [height]="'100%'"
+                             (design)="showViewer = false"></stimulsoft-viewer-angular>
+  <stimulsoft-designer-angular #designer
+                               *ngIf="!showViewer"
+                               [requestUrl]="'http://localhost:2347/Designer'"
+                               [height]="'100%'"
+                               [width]="'100%'"
+                               (designerLoaded)="this.designer.designerEl.nativeElement.style.height='100%'">
+  </stimulsoft-designer-angular>
+</div>
+

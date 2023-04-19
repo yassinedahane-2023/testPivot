@@ -12,6 +12,7 @@ import { SupabaseService } from './services/supabase.service';
 })
 @UntilDestroy({ checkProperties: true })
 export class AppComponent implements AfterViewInit{
+  title = '';
   session = this.supabase.session
   @ViewChild(MatSidenav)sidenav!: MatSidenav;
 
